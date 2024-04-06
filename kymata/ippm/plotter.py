@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 
 import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
+import matplotlib.patheffects as pe
 import numpy as np
 from scipy.interpolate import splev
 
@@ -13,6 +13,7 @@ class IPPMPlotter(object):
              graph: Dict[str, Node],
              colors: Dict[str, str],
              title: str,
+             scaled_hexels: bool=False,
              figheight: int=5,
              figwidth: int=10):
         """
@@ -26,6 +27,8 @@ class IPPMPlotter(object):
                     contains the color for each function. The nodes and edges are colored accordingly.
                 title string
                     title of the plot
+                scaled_hexels bool
+                    scales the node by the significance. Default is False
                 figheight int
                     height
                 figwidth int
@@ -58,19 +61,24 @@ class IPPMPlotter(object):
                 edge_colors.append(node_colors[i])
 
             bsplines += self._make_bspline_paths(pairs)
-        
+
+        # override node size
+        if not scaled_hexels:
+            node_sizes = [150] * len(graph.keys())
+
         fig, ax = plt.subplots()
     
         for path, color in zip(bsplines, edge_colors):
             ax.plot(path[0], path[1], color=color, linewidth='3', zorder=-1)
+            ax.text(x=path[0][0] + 10,
+                    y=path[1][0] - 0.006,
+                    s="function_name()",
+                    color=color,
+                    zorder=1,
+                    path_effects=[pe.withStroke(linewidth=4, foreground="white")])
 
-        ax.scatter(x=hexel_x, y=hexel_y, c=node_colors, s=node_sizes, zorder=1)
-        
-        legend = []
-        for f in colors.keys():
-            legend.append(Line2D([0], [0], marker='o', color='w', label=f, markerfacecolor=colors[f], markersize=15))
+        ax.scatter(x=hexel_x, y=hexel_y, c=node_colors, s=node_sizes, zorder=2)
 
-        plt.legend(handles=legend, loc='upper left')
         plt.title(title)
 
         ax.set_ylim(min(hexel_y) - 0.1, max(hexel_y) + 0.1)
