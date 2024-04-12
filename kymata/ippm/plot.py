@@ -6,6 +6,8 @@ import numpy as np
 from scipy.interpolate import splev
 
 from .builder import IPPMNode
+from ..plot.annotations import add_arrow
+
 
 def plot_ippm(graph: Dict[str, IPPMNode],
               colors: Dict[str, str],
@@ -73,6 +75,11 @@ def plot_ippm(graph: Dict[str, IPPMNode],
                 color=color,
                 zorder=1,
                 path_effects=[pe.withStroke(linewidth=4, foreground="white")])
+        ax.arrow(x=path[0][-1]-7, dx=1,
+                 y=path[1][-1], dy=0,
+                 shape="full", width=0, lw=0, head_width=.03, head_length=5, color=color,
+                 length_includes_head=False, head_starts_at_zero=False,
+                 )
 
     ax.scatter(x=node_x, y=node_y, c=node_colors, s=node_sizes, marker="H", zorder=2)
 
@@ -88,8 +95,6 @@ def plot_ippm(graph: Dict[str, IPPMNode],
 
     fig.set_figheight(figheight)
     fig.set_figwidth(figwidth)
-
-    #plt.show()
 
 
 def _make_bspline_paths(hexel_coordinate_pairs: List[List[Tuple[float, float]]]) -> List[List[np.array]]:
