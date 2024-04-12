@@ -3,6 +3,7 @@ from itertools import cycle
 from statistics import NormalDist
 from typing import Tuple, Dict, List
 from collections import namedtuple
+import math
 
 import matplotlib.colors
 import matplotlib.pyplot as plt
@@ -13,10 +14,16 @@ from sklearn.metrics.pairwise import euclidean_distances
 import requests
 import seaborn as sns
 from matplotlib.lines import Line2D
-import math
+
 from kymata.entities.expression import HexelExpressionSet, DIM_FUNCTION, DIM_LATENCY
 
-Node = namedtuple('Node', 'magnitude position in_edges')
+
+class IPPMNode(namedtuple):
+    """convenient tuple/class to hold information about nodes"""
+    magnitude: float
+    position: int
+    in_edges: list[str]
+
 
 class IPPMHexel(object):
     """
@@ -288,7 +295,7 @@ def causality_violation_score(denoised_hexels: Dict[str, IPPMHexel], hierarchy: 
         causality_violations,
         total_arrows)
 
-def function_recall(noisy_hexels: Dict[str, IPPMHexel], funcs: List[str], ippm_dict: Dict[str, Node], hemi: str) -> Tuple[float]:
+def function_recall(noisy_hexels: Dict[str, IPPMHexel], funcs: List[str], ippm_dict: Dict[str, IPPMNode], hemi: str) -> Tuple[float]:
     """
         This is the second scoring metric: function recall. It illustrates what proportion out of functions in the noisy hexels are detected as part of IPPM. E.g., 9 functions but only 8 found => 8/9 = function recall. Use this along with causality violation to evaluate IPPMs and analyse their strengths and weaknesses. 
         

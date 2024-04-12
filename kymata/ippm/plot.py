@@ -5,9 +5,9 @@ import matplotlib.patheffects as pe
 import numpy as np
 from scipy.interpolate import splev
 
-from .builder import Node
+from .builder import IPPMNode
 
-def plot_ippm(graph: Dict[str, Node],
+def plot_ippm(graph: Dict[str, IPPMNode],
               colors: Dict[str, str],
               title: str,
               scaled_hexels: bool=False,
