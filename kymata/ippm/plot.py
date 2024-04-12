@@ -32,10 +32,11 @@ def plot_ippm(graph: Dict[str, IPPMNode],
                 width
     """
     # first lets aggregate all the information.
-    hexel_x = [_ for _ in range(len(graph.keys()))]                    # x coordinates for nodes e.g., (x, y) = (hexel_x[i], hexel_y[i])
-    hexel_y = [_ for _ in range(len(graph.keys()))]                    # y coordinates for nodes
-    node_colors = [_ for _ in range(len(graph.keys()))]                # color for nodes
-    node_sizes = [_ for _ in range(len(graph.keys()))]                 # size of nodes
+    n_nodes = len(graph)
+    node_x:      list[int] = list(range(n_nodes))  # x coordinates for nodes e.g., (x, y) = (hexel_x[i], hexel_y[i])
+    node_y:      list[int] = list(range(n_nodes))  # y coordinates for nodes
+    node_colors: list[int] = list(range(n_nodes))  # color for nodes
+    node_sizes:  list[int] = list(range(n_nodes))  # size of nodes
     edge_colors = []
     bsplines = []
     for i, node in enumerate(graph.keys()):
@@ -46,8 +47,7 @@ def plot_ippm(graph: Dict[str, IPPMNode],
                 break
 
         node_sizes[i] = graph[node].magnitude
-        hexel_x[i] = graph[node].position[0]
-        hexel_y[i] = graph[node].position[1]
+        node_x[i], node_y[i] = graph[node].position
 
         pairs = []
         for inc_edge in graph[node].in_edges:
@@ -74,11 +74,11 @@ def plot_ippm(graph: Dict[str, IPPMNode],
                 zorder=1,
                 path_effects=[pe.withStroke(linewidth=4, foreground="white")])
 
-    ax.scatter(x=hexel_x, y=hexel_y, c=node_colors, s=node_sizes, zorder=2)
+    ax.scatter(x=node_x, y=node_y, c=node_colors, s=node_sizes, marker="H", zorder=2)
 
     plt.title(title)
 
-    ax.set_ylim(min(hexel_y) - 0.1, max(hexel_y) + 0.1)
+    ax.set_ylim(min(node_y) - 0.1, max(node_y) + 0.1)
     ax.set_yticklabels([])
     ax.yaxis.set_visible(False)
     ax.spines['top'].set_visible(False)

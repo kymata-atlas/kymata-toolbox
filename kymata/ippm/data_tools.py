@@ -20,7 +20,7 @@ from kymata.entities.expression import HexelExpressionSet, DIM_FUNCTION, DIM_LAT
 class IPPMNode(NamedTuple):
     """convenient tuple/class to hold information about nodes"""
     magnitude: float
-    position: int
+    position: tuple[float, float]
     in_edges: list[str]
 
 

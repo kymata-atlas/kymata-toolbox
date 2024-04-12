@@ -13,6 +13,7 @@ class IPPMBuilder(object):
     """
     pass
 
+
 def build_ippm_graph(hexels: Dict[str, IPPMHexel],
                      function_hier : Dict[str, List[str]],
                      inputs : List[str],
