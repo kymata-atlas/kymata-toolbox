@@ -6,7 +6,6 @@ import numpy as np
 from scipy.interpolate import splev
 
 from .builder import IPPMNode
-from ..plot.annotations import add_arrow
 
 
 def plot_ippm(graph: Dict[str, IPPMNode],
