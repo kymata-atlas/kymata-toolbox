@@ -11,7 +11,7 @@ def test_get_top_level_functions():
                   'f4': []}
 
     top_level_fs = list(_get_top_level_functions(test_edges))
-    assert set(['f1', 'f2']) == set(top_level_fs)
+    assert set(top_level_fs) == {'f1', 'f2'}
 
 
 def test_sort_by_latency():

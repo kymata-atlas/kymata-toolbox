@@ -1,8 +1,7 @@
 import json
 from itertools import cycle
 from statistics import NormalDist
-from typing import Tuple, Dict, List
-from collections import namedtuple
+from typing import Tuple, Dict, List, NamedTuple
 import math
 
 import matplotlib.colors
@@ -18,7 +17,7 @@ from matplotlib.lines import Line2D
 from kymata.entities.expression import HexelExpressionSet, DIM_FUNCTION, DIM_LATENCY
 
 
-class IPPMNode(namedtuple):
+class IPPMNode(NamedTuple):
     """convenient tuple/class to hold information about nodes"""
     magnitude: float
     position: int
