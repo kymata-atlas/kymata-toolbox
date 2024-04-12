@@ -1,18 +1,18 @@
 import json
+import math
 from itertools import cycle
 from statistics import NormalDist
 from typing import Tuple, Dict, List, NamedTuple
-import math
 
 import matplotlib.colors
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import normalize
-from sklearn.metrics.pairwise import euclidean_distances
 import requests
 import seaborn as sns
 from matplotlib.lines import Line2D
+from sklearn.metrics.pairwise import euclidean_distances
+from sklearn.preprocessing import normalize
 
 from kymata.entities.expression import HexelExpressionSet, DIM_FUNCTION, DIM_LATENCY
 
@@ -221,6 +221,7 @@ def stem_plot(
 
     plt.show()
 
+
 def causality_violation_score(denoised_hexels: Dict[str, IPPMHexel], hierarchy: Dict[str, List[str]], hemi: str, inputs: List[str]) -> Tuple[float, int, int]:
     """
         Assumption: hexels are denoised. Otherwise, it doesn't really make sense to check the min/max latency of noisy hexels.
@@ -294,7 +295,8 @@ def causality_violation_score(denoised_hexels: Dict[str, IPPMHexel], hierarchy: 
         causality_violations,
         total_arrows)
 
-def function_recall(noisy_hexels: Dict[str, IPPMHexel], funcs: List[str], ippm_dict: Dict[str, IPPMNode], hemi: str) -> Tuple[float]:
+
+def function_recall(noisy_hexels: Dict[str, IPPMHexel], funcs: List[str], ippm_dict: Dict[str, IPPMNode], hemi: str) -> Tuple[float, float, float]:
     """
         This is the second scoring metric: function recall. It illustrates what proportion out of functions in the noisy hexels are detected as part of IPPM. E.g., 9 functions but only 8 found => 8/9 = function recall. Use this along with causality violation to evaluate IPPMs and analyse their strengths and weaknesses. 
         

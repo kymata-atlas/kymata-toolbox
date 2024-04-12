@@ -31,7 +31,7 @@ def plot_ippm(graph: Dict[str, IPPMNode],
             figwidth int
                 width
     """
-    # first lets aggregate all of the information.
+    # first lets aggregate all the information.
     hexel_x = [_ for _ in range(len(graph.keys()))]                    # x coordinates for nodes e.g., (x, y) = (hexel_x[i], hexel_y[i])
     hexel_y = [_ for _ in range(len(graph.keys()))]                    # y coordinates for nodes
     node_colors = [_ for _ in range(len(graph.keys()))]                # color for nodes
