@@ -1,6 +1,7 @@
 import unittest.mock
 import numpy as np
-from kymata.ippm.plotter import IPPMPlotter
+
+from kymata.ippm.plot import _make_bspline_ctr_points, _make_bspline_path, _make_bspline_paths
 
 
 class TestIPPMPlotter(unittest.TestCase):
@@ -13,8 +14,7 @@ class TestIPPMPlotter(unittest.TestCase):
         # now if np.array is called, it will return the same list.
         mock_np.array.side_effect = my_side_effect
         start_n_end = [(0, 100), (100, 0)] # top left to bottom right
-        plotter = IPPMPlotter()
-        ctr_points = plotter._make_bspline_ctr_points(start_n_end)
+        ctr_points = _make_bspline_ctr_points(start_n_end)
         expected_ctr_points = [(0, 100), (20, 100), (25, 100), (30, 0), (35, 0), (100, 0)]
         self.assertEqual(expected_ctr_points, ctr_points)
 
@@ -35,8 +35,7 @@ class TestIPPMPlotter(unittest.TestCase):
         mock_np.splev.side_effect = splev_side_effect
 
         ctr_points = [(0, 100), (20, 100), (25, 100), (30, 0), (35, 0), (100, 0)]
-        plotter = IPPMPlotter()
-        bspline_path = plotter._make_bspline_path(np.array(ctr_points))
+        bspline_path = _make_bspline_path(np.array(ctr_points))
         expected_path = [np.array([  0.        ,   2.51085587,   4.83164845,   6.97080217,
                                     8.93674146,  10.73789074,  12.38267445,  13.879517  ,
                                     15.23684283,  16.46307635,  17.56664201,  18.55596422,
@@ -94,8 +93,7 @@ class TestIPPMPlotter(unittest.TestCase):
 
         # first one is top left to bot right, second is bot left to top right, last is bot left to slightly less left (null edge)
         hexel_coordinate_pairs = [[(0, 100), (100, 0)], [(100, 0), (0, 100)], [(0, 0), (20, 0)]]
-        plotter = IPPMPlotter()
-        bspline_paths = plotter._make_bspline_paths(hexel_coordinate_pairs)
+        bspline_paths = _make_bspline_paths(hexel_coordinate_pairs)
         expected_paths = []
         for pair in hexel_coordinate_pairs:
             # assuming that _make_bspline_ctr_points works and _make_bspline_path.
@@ -103,8 +101,8 @@ class TestIPPMPlotter(unittest.TestCase):
             if pair == [(0, 0), (20, 0)]:
                 expected_paths.append([np.linspace(0, 20, 100, endpoint=True), np.array([0] * 100)])
             else:
-                ctr_points = plotter._make_bspline_ctr_points(pair)
-                expected_paths.append(plotter._make_bspline_path(ctr_points))
+                ctr_points = _make_bspline_ctr_points(pair)
+                expected_paths.append(_make_bspline_path(ctr_points))
         
         bspline_paths_rounded = [round(x_ii, 2) for x in bspline_paths for x_i in x for x_ii in x_i]
         expected_paths_rounded = [round(x_ii, 2) for x in expected_paths for x_i in x for x_ii in x_i]
